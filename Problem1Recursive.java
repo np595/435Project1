@@ -11,9 +11,68 @@ class Problem1Recursive {
         } 
     } 
     
-    Node insert(Node root, int key){
+    Node root;
     
+    Problem1Recursive(){
         
+        Node root = null;
+        
+    }
+    
+    void insert(int key){
+    
+        root = insertN(root, key);
+    
+    }
+    
+    Node insertN(Node root, int key){
+    
+        if(root == null){ //Check if tree is empty and return the number as a new node
+            
+            root = new Node(key);
+            return root;
+        
+        }
+        
+        //Else continue until left or right is found null
+        if (key < root.key) 
+            root.left = insertN(root.left, key); 
+        else if (key > root.key) 
+            root.right = insertN(root.right, key);
+        
+        return root;
+    
+    }
+    
+    void remove(int key){
+    
+        root = removeN(root, key);
+    
+    }
+    
+    Node removeN(Node root, int key){
+    
+        if(root == null)
+            return root;
+        
+        if(key < root.key)
+            root.left = removeN(root.left, key);
+        else if(key > root.key)
+            root.right = removeN(root.right, key);
+        
+        else{ //if root.key = key then that's the one we want to delete
+        
+            if (root.left == null) //Check for any leaves or children to then move up once deleted
+                return root.right; 
+            else if (root.right == null) 
+                return root.left; 
+
+            
+            root.right = deleteRec(root.right, root.key);
+        
+        }
+                
+        return root;
     
     }
 
