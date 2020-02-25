@@ -1,6 +1,23 @@
 class Problem2c{
 
+    class Node { 
+        int key; 
+        Node left, right; 
+  
+        public Node(int item) { 
+            key = item; 
+            left = null;
+            right = null; 
+        } 
+    } 
     
+    Node root;
+    
+    Problem1Recursive(){
+        
+        Node root = null;
+        
+    }
   
     Node sort(int arr[], int min, int max) { 
 
