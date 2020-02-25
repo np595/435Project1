@@ -75,5 +75,42 @@ class Problem1Recursive {
         return root;
     
     }
+    
+    Node findNext(Node root){ //Proceeds down the tree for the next highest value
+    
+        
+    
+    }
+    
+    Node findPrev(Node root){ //Proceeds up the tree to the limit of the root
+    
+        
+    
+    }
+    
+    int findMin(Node root) { 
+        Node current = root; 
+        
+        while (current.left != null) { //Recursively look through the data until the absolute left three has been found which holds the min
+            
+            current = current.left; 
+            
+        } 
+        return current.root; 
+    } 
 
+    int findMax(Node root){
+    
+        Node current = root;
+        
+        while(currentl.right != null){ //Continues until the absolute right has been found for the max value
+        
+            current = current.right;
+            
+        }
+        
+        return current.root;
+        
+    }
+    
 }
