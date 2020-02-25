@@ -96,7 +96,7 @@ class Problem1Recursive {
             current = current.left; 
             
         } 
-        return current.root; 
+        return current.key; 
     } 
 
     int findMax(Node root){
@@ -109,7 +109,7 @@ class Problem1Recursive {
             
         }
         
-        return current.root;
+        return current.key;
         
     }
     
