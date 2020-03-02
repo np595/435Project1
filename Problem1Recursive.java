@@ -66,6 +66,8 @@ class Problem1Recursive {
                 return root.right; 
             else if (root.right == null) 
                 return root.left;
+            
+            root.right = removeN(root.right, root.key); 
         
         }
                 
