@@ -65,10 +65,7 @@ class Problem1Recursive {
             if (root.left == null) //Check for any leaves or children to then move up once deleted
                 return root.right; 
             else if (root.right == null) 
-                return root.left; 
-
-            
-            root.right = deleteRec(root.right, root.key);
+                return root.left;
         
         }
                 
@@ -111,6 +108,12 @@ class Problem1Recursive {
         
         return current.key;
         
+    }
+    
+    public static void main(String[] args){
+    
+        
+    
     }
     
 }
