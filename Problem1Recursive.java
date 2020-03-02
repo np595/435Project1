@@ -102,7 +102,7 @@ class Problem1Recursive {
     
         Node current = root;
         
-        while(currentl.right != null){ //Continues until the absolute right has been found for the max value
+        while(current.right != null){ //Continues until the absolute right has been found for the max value
         
             current = current.right;
             
