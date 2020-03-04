@@ -211,16 +211,26 @@ class Problem1Iterative{
 
                 return curr.key;
         }
+        
+        void getRandomArray(int size){
+                Random rand = new Random();
+      
+                int i;
+      
+                int[] arr =  new int[size];
+      
+                for(i = 0; i < size; i++){
+                        arr[i] = rand.nextInt(100);
+                }
+                for(i = 0; i < size; i++){
+                        insert(root, arr[i]);
+                }
+        }
 
         public static void main(String[] args){
                 Problem2Iterative tree = new Problem2Iterative();
                 
-                tree.root = tree.insert(5);
-                tree.root = tree.insert(10);
-                tree.root = tree.insert(15);
-                tree.root = tree.insert(23);
-                tree.root = tree.insert(12);
-                tree.root = tree.insert(24);
+                getRandomArray(10000);
 
                 tree.root = tree.remove(10);
 
