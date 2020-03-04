@@ -159,17 +159,27 @@ class Problem1Recursive {
                 return current.key;
 
         }
+        
+        void randomInsert(int size){
+                Random rand = new Random();
+      
+                int i;
+      
+                int[] arr =  new int[size];
+      
+                for(i = 0; i < size; i++){
+                        arr[i] = rand.nextInt(100);
+                }
+                for(i = 0; i < size; i++){
+                        insert(root, arr[i]);
+                }
+        }
 
         public static void main(String[] args){
 
                 Problem2Recursive tree = new Problem2Recursive();
                 
-                tree.root = tree.insert(5);
-                tree.root = tree.insert(10);
-                tree.root = tree.insert(15);
-                tree.root = tree.insert(23);
-                tree.root = tree.insert(12);
-                tree.root = tree.insert(24);
+                randomInsert(10);
 
                 tree.root = tree.remove(10);
 
