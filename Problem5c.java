@@ -1,3 +1,5 @@
+import java.util.Random
+
 class Problem1Iterative{
 
         class Node{
