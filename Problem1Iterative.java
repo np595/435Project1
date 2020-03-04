@@ -11,7 +11,7 @@ class Problem1Iterative{
                 }
         }
 
-        static Node newNode(int key){
+        Node newNode(int key){
                 Node temp = new Node();
 
                 temp.key = data;
@@ -27,11 +27,12 @@ class Problem1Iterative{
 
         }
 
-        static void insert(int key){
+        Node insert(int key){
                 root = insertN(root, key);
+                return root;
         }
 
-        static Node insertN(Node root, int key){
+        Node insertN(Node root, int key){
                 Node newNode = newNode(key);
 
                 Node curr = root;
@@ -54,11 +55,12 @@ class Problem1Iterative{
                 return next;
         }
 
-        static void remove(int key){
+        Node remove(int key){
                 root = removeN(root, key);
+                return root;
         }
 
-        static Node removeN(Node root, int key){
+        Node removeN(Node root, int key){
                 Node newNode = newNode(key);
 
                 Node curr = root;
@@ -132,11 +134,12 @@ class Problem1Iterative{
                 return next;
         }
 
-        static void findNext(int key){
+        Node findNext(int key){
                 root = findNextSuc(root, key);
+                return root;
         }
 
-        static Node findNextSuc(Node root, int key){
+        Node findNextSuc(Node root, int key){
                 if(root == null)
                         return null;
                 if(root.right != null){
@@ -159,11 +162,12 @@ class Problem1Iterative{
                 }
         }
 
-        static void findPrev(int key){
+        Node findPrev(int key){
                 root = findPrevSuc(root, key);
+                return root;
         }
 
-        static Node findPrevSuc(Node root, int key){
+        Node findPrevSuc(Node root, int key){
                 if(root = null)
                         return root;
 
@@ -188,7 +192,7 @@ class Problem1Iterative{
                 }
         }
 
-        static int findMin(Node root){
+        int findMin(Node root){
                 Node curr = root;
 
                 while(curr.left != null)
@@ -197,7 +201,7 @@ class Problem1Iterative{
                 return curr.key;
         }
 
-        static int findMax(Node root){
+        int findMax(Node root){
                 Node curr = root;
 
                 while(curr.right != null)
@@ -207,20 +211,22 @@ class Problem1Iterative{
         }
 
         public static void main(String[] args){
-                insert(5);
-                insert(10);
-                insert(15);
-                insert(23);
-                insert(12);
-                insert(24);
+                Problem2Iterative tree = new Problem2Iterative();
+                
+                tree.root = tree.insert(5);
+                tree.root = tree.insert(10);
+                tree.root = tree.insert(15);
+                tree.root = tree.insert(23);
+                tree.root = tree.insert(12);
+                tree.root = tree.insert(24);
 
-                remove(10);
+                tree.root = tree.remove(10);
 
-                findMin(root);
-                findMax(root);
+                int max = tree.findMin(tree.root);
+                int min = tree.findMax(tree.root);
 
-                findPrev(1);
-                findNext(1);
+                tree.root = findPrev(1);
+                tree.root = findNext(1);
         }
 
 }
