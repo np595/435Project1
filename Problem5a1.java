@@ -210,21 +210,26 @@ class avlTree{
         void preOrder(Node root){
 
         }
+        
+        void randomInsert(int size){
+                Random rand = new Random();
+      
+                int i;
+      
+                int[] arr =  new int[size];
+      
+                for(i = 0; i < size; i++){
+                        arr[i] = rand.nextInt(100);
+                }
+                for(i = 0; i < size; i++){
+                        insert(root, arr[i]);
+                }
+        }
 
         public static void main(String[] args){
                 avlTree tree = new avlTree();
                 Node tempCheck;
                 Node temp = null;
-
-                tree.root = tree.insert(tree.root, 10);
-                //System.out.println(tree.root.key);
-                tree.root = tree.insert(tree.root, 15);
-                //System.out.println(tree.root.key + " " + tree.root.right.key);
-                tree.root = tree.insert(tree.root, 5);
-                tree.root = tree.insert(tree.root, 4);
-                tree.root = tree.insert(tree.root, 12);
-
-                tree.root = tree.remove(tree.root, 5);
 
                 temp = tree.root.left;
                 tempCheck = tree.minVal(tree.root);
