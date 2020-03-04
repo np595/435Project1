@@ -160,20 +160,22 @@ class Problem1Recursive {
 
         public static void main(String[] args){
 
-                insert(5);
-                insert(10);
-                insert(15);
-                insert(23);
-                insert(12);
-                insert(24);
+                Problem2Recursive tree = new Problem2Recursive();
+                
+                tree.root = tree.insert(5);
+                tree.root = tree.insert(10);
+                tree.root = tree.insert(15);
+                tree.root = tree.insert(23);
+                tree.root = tree.insert(12);
+                tree.root = tree.insert(24);
 
-                remove(10);
+                tree.root = tree.remove(10);
 
-                findMin(root);
-                findMax(root);
+                int max = tree.findMin(tree.root);
+                int min = tree.findMax(tree.root);
 
-                findPrev(1);
-                findNext(1);
+                tree.root = findPrev(1);
+                tree.root = findNext(1);
 
         }
 
