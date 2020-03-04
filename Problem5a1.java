@@ -233,7 +233,7 @@ class avlTree{
                 Node tempCheck;
                 Node temp = null;
                 
-                randomInsert(10);
+                randomInsert(10000);
 
                 temp = tree.root.left;
                 tempCheck = tree.minVal(tree.root);
