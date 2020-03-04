@@ -213,7 +213,7 @@ class avlTree{
 
         }
         
-        void randomInsert(int size){
+        void getRandomArray(int size){
                 Random rand = new Random();
       
                 int i;
@@ -233,7 +233,7 @@ class avlTree{
                 Node tempCheck;
                 Node temp = null;
                 
-                randomInsert(10000);
+                getRandomArray(10000);
 
                 temp = tree.root.left;
                 tempCheck = tree.minVal(tree.root);
