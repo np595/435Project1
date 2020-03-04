@@ -17,13 +17,14 @@ class Problem1Recursive {
 
         }
 
-        static void insert(int key){
+        Node insert(int key){
 
                 root = insertN(root, key);
+                return root;
 
         }
 
-        static Node insertN(Node root, int key){
+        Node insertN(Node root, int key){
 
                 if(root == null){ //Check if tree is empty and return the number as a new node
                         root = new Node(key);
@@ -38,11 +39,12 @@ class Problem1Recursive {
                 return root;
         }
 
-        static void remove(int key){
+        Node remove(int key){
                 root = removeN(root, key);
+                return root;
         }
 
-        static Node removeN(Node root, int key){
+        Node removeN(Node root, int key){
                 if(root == null)
                         return null;
 
@@ -63,13 +65,14 @@ class Problem1Recursive {
                 return root;
         }
 
-        static void findNext(int key){
+        Node findNext(int key){
 
                 root = findNextSuc(root, key);
+                return root;
 
         }
 
-        static Node findNextSuc(Node root, int key){
+        Node findNextSuc(Node root, int key){
 
                 if(root == null)
                         return null;
@@ -96,13 +99,14 @@ class Problem1Recursive {
 
         }
 
-        static void findPrev(int key){
+        Node findPrev(int key){
 
                 root = findPrevSuc(root, key);
+                return root;
 
         }
 
-        static Node findPrevSuc(Node root, int key){
+        Node findPrevSuc(Node root, int key){
 
                 if(root == null)
                         return root;
@@ -129,7 +133,7 @@ class Problem1Recursive {
 
         }
 
-        static int findMin(Node root){
+        int findMin(Node root){
 
                 Node current = root;
 
@@ -143,7 +147,7 @@ class Problem1Recursive {
 
         }
 
-        static int findMax(Node root){
+        int findMax(Node root){
 
                 Node current = root;
 
