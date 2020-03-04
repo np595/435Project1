@@ -160,7 +160,7 @@ class Problem1Recursive {
 
         }
         
-        void randomInsert(int size){
+        void getRandomArray(int size){
                 Random rand = new Random();
       
                 int i;
@@ -179,7 +179,7 @@ class Problem1Recursive {
 
                 Problem2Recursive tree = new Problem2Recursive();
                 
-                randomInsert(10000);
+                getRandomArray(10000);
 
                 tree.root = tree.remove(10);
 
