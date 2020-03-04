@@ -28,7 +28,7 @@ class Problem1Iterative{
 
         Problem2Iterative(){
 
-                Node root = null;
+                root = null;
 
         }
 
@@ -45,17 +45,25 @@ class Problem1Iterative{
 
                 while(curr != null){ //Loops through the tree until the spot is found for a new insert
                         next = curr;
-                        if(key < curr.key)
+                        if(key < curr.key){
+                                counter++;
                                 curr = curr.left;
-                        else
+                        }
+                        else{
+                                counter++;
                                 curr = curr.right;
+                        }
                 }
 
-                else if(key < curr.key) //Checks if the left is open first
+                else if(key < curr.key){ //Checks if the left is open first
+                        counter++;
                         next.left = newNode;
+                }
 
-                else    //Else place it in the right
+                else{    //Else place it in the right
+                        counter++;
                         next.right = newNode;
+                }
 
                 return next;
         }
@@ -74,19 +82,25 @@ class Problem1Iterative{
                 while(curr != null){
                         if(key > curr.key){
                                 if(curr.right != null){
+                                        counter++;
                                         next = curr;
                                         curr = curr.right;
                                 }
-                                else
+                                else{
+                                        counter++;
                                         break;
+                                }
                         }
                         else if(key < curr.key){
                                 if(curr.left != null){
+                                        counter++;
                                         next = curr;
                                         curr = curr.left;
                                 }
-                                else
+                                else{
+                                        counter++;
                                         break;
+                                }
                         }
                         else{ //If key == curr.key or if value is found
                                 if(curr.left == null && curr.right == null){
@@ -102,23 +116,29 @@ class Problem1Iterative{
                                 }
                                 else if(curr.left == null){
                                         if(next == null){
+                                                counter++;
                                                 root = curr.right;
                                         }
                                         else if(next.left.key == curr.key){
+                                                counter++;
                                                 next.left = curr.right;
                                         }
                                         else{
+                                                counter++;
                                                 next.right = curr.right;
                                         }
                                 }
                                 else if(curr.right == null){
                                         if(next == null){
+                                                counter++;
                                                 root = curr.left;
                                         }
                                         else if(next.left.key == curr.key){
+                                                counter++;
                                                 next.left == curr.left;
                                         }
                                         else{
+                                                counter++;
                                                 next.right = curr.left;
                                         }
                                 }
@@ -126,6 +146,7 @@ class Problem1Iterative{
                                         Node check = curr.right;
                                         while(true){
                                                 if(check.left != null){
+                                                        counter++;
                                                         check = curr.left;
                                                 }
                                                 else
@@ -148,9 +169,12 @@ class Problem1Iterative{
                 if(root == null)
                         return null;
                 if(root.right != null){
+                        counter++;
                         Node temp = root.right;
-                        while(temp.left != null)
+                        while(temp.left != null){
+                                counter++;
                                 temp = temp.left;
+                        }
                         return temp;
                 }
                 else{
@@ -158,11 +182,14 @@ class Problem1Iterative{
                         Node curr = root;
                         while(curr != root){
                                 if(root.key < curr.key){
+                                        counter++;
                                         successor = curr;
                                         curr = curr.left;
                                 }
-                                else
+                                else{
+                                        counter++;
                                         curr = curr.right;
+                                }
                         }
                 }
         }
@@ -177,9 +204,12 @@ class Problem1Iterative{
                         return root;
 
                 if(root.left != null){
+                        counter++;
                         Node temp = root.left;
-                        while(temp.right != null)
+                        while(temp.right != null){
+                                counter++;
                                 temp = temp.right;
+                        }
                         return temp;
                 }
                 else{
@@ -187,6 +217,7 @@ class Problem1Iterative{
                         Node curr = root;
                         while(curr != root){
                                 if(root.key < curr.key){
+                                        counter++;
                                         successor = curr;
                                         curr = curr.right;
                                 }
@@ -246,6 +277,7 @@ class Problem1Iterative{
 
                 tree.root = findPrev(1);
                 tree.root = findNext(1);
+                System.out.println(counter);
         }
 
 }
