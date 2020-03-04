@@ -17,7 +17,7 @@ class Problem1Recursive {
 
         Problem1Recursive(){
 
-                Node root = null;
+                root = null;
 
         }
 
