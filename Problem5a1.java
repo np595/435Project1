@@ -1,232 +1,235 @@
-class Problem1Iterative{
+class avlTree{
 
         class Node{
-                int key;
-                Node left, right;
+                int key, size;
+                Node left, right, parent;
 
                 public Node(int item){
                         key = item;
                         left = null;
                         right = null;
+                        parent = null;
+                        size = 1;
                 }
         }
 
-        Node newNode(int key){
-                Node temp = new Node();
+        Node root;
+
+        avlTree(){
+                root = null;
+        }
+
+        int heightCheck(Node root){
+                if(root == null)
+                        return 0;
+
+                return root.size;
+        }
+
+        int max(int a, int b){
+                return (a > b) ? a : b;
+        }
+
+        Node rightRotate(Node root){
+                Node curr = root.left;
+                Node next = curr.right;
+
+                curr.right = root;
+                root.left = next;
+
+                root.size = max(heightCheck(root.left), heightCheck(root.right)) + 1;
+                curr.size = max(heightCheck(curr.left), heightCheck(curr.right)) + 1;
+                return curr;
+        }
+
+        Node leftRotate(Node root){
+                Node curr = root.right;
+                Node next = curr.left;
+
+                curr.left = root;
+                root.right = next;
+
+                root.size = max(heightCheck(root.left), heightCheck(root.right)) + 1;
+                curr.size = max(heightCheck(curr.left), heightCheck(curr.right)) + 1;
+                return curr;
+        }
+
+        int balanceCheck(Node root){
+                if(root == null)
+                        return 0;
+                return heightCheck(root.left)-heightCheck(root.right);
+        }
+
+        Node newNode(int data){
+                Node temp = new Node(data);
 
                 temp.key = data;
                 temp.left = null;
                 temp.right = null;
+                temp.parent = null;
+                temp.size = 1;
 
                 return temp;
         }
 
-        Problem2Iterative(){
-
-                Node root = null;
-
-        }
-
-        Node insert(int key){
-                root = insertN(root, key);
-                return root;
-        }
-
-        Node insertN(Node root, int key){
-                Node newNode = newNode(key);
-
-                Node curr = root;
-                Node next = null;
-
-                while(curr != null){ //Loops through the tree until the spot is found for a new insert
-                        next = curr;
-                        if(key < curr.key)
-                                curr = curr.left;
-                        else
-                                curr = curr.right;
-                }
-
-                else if(key < curr.key) //Checks if the left is open first
-                        next.left = newNode;
-
-                else    //Else place it in the right
-                        next.right = newNode;
-
-                return next;
-        }
-
-        Node remove(int key){
-                root = removeN(root, key);
-                return root;
-        }
-
-        Node removeN(Node root, int key){
+        Node insert(Node root, int key){
                 Node newNode = newNode(key);
 
                 Node curr = root;
                 Node next = null;
 
                 while(curr != null){
-                        if(key > curr.key){
-                                if(curr.right != null){
-                                        next = curr;
-                                        curr = curr.right;
-                                }
-                                else
-                                        break;
-                        }
-                        else if(key < curr.key){
-                                if(curr.left != null){
-                                        next = curr;
-                                        curr = curr.left;
-                                }
-                                else
-                                        break;
-                        }
-                        else{ //If key == curr.key or if value is found
-                                if(curr.left == null && curr.right == null){
-                                        if(next == null){
-                                                root = null;
-                                        }
-                                        else if(next.left.key == curr.key){
-                                                next.left = null;
-                                        }
-                                        else{
-                                                next.right = null;
-                                        }
-                                }
-                                else if(curr.left == null){
-                                        if(next == null){
-                                                root = curr.right;
-                                        }
-                                        else if(next.left.key == curr.key){
-                                                next.left = curr.right;
-                                        }
-                                        else{
-                                                next.right = curr.right;
-                                        }
-                                }
-                                else if(curr.right == null){
-                                        if(next == null){
-                                                root = curr.left;
-                                        }
-                                        else if(next.left.key == curr.key){
-                                                next.left == curr.left;
-                                        }
-                                        else{
-                                                next.right = curr.left;
-                                        }
-                                }
-                                else{
-                                        Node check = curr.right;
-                                        while(true){
-                                                if(check.left != null){
-                                                        check = curr.left;
-                                                }
-                                                else
-                                                        break;
-                                        }
-                                        int successor = check.key;
-                                        curr = successor;
-                                }
-                        }
+                        next = curr;
+                        if(key < curr.key)
+                                curr = curr.left;
+                        else
+                                curr = curr.right;
                 }
+                if(next == null)
+                        next = newNode;
+                else if(key < next.key)
+                        next.left = newNode;
+                else
+                        next.right = newNode;
+
+                //System.out.println(root.key + " " + curr.key);
+
+                next.size = 1 + max(heightCheck(next.left), heightCheck(next.right));
+                int balance = balanceCheck(next);
+                //System.out.println(root.key + " " + next.key);
+                if((next.left == null) && (next.right == null))
+                        return next;
+
+                if(balance > 1 && key < next.left.key){
+                        return rightRotate(next);
+                }
+                else if(balance < -1 && key > next.right.key){
+                        return leftRotate(next);
+                }
+                else if(balance > 1 && key > next.left.key){
+                        next.left = leftRotate(next.left);
+                        return rightRotate(next);
+                }
+                else if(balance < -1 && key < next.right.key){
+                        next.right = rightRotate(next.right);
+                        return  leftRotate(next);
+                }
+
                 return next;
+
         }
 
-        Node findNext(int key){
-                root = findNextSuc(root, key);
-                return root;
-        }
-
-        Node findNextSuc(Node root, int key){
-                if(root == null)
-                        return null;
-                if(root.right != null){
-                        Node temp = root.right;
-                        while(temp.left != null)
-                                temp = temp.left;
-                        return temp;
-                }
-                else{
-                        Node successor = null;
-                        Node curr = root;
-                        while(curr != root){
-                                if(root.key < curr.key){
-                                        successor = curr;
-                                        curr = curr.left;
-                                }
-                                else
-                                        curr = curr.right;
-                        }
-                }
-        }
-
-        Node findPrev(int key){
-                root = findPrevSuc(root, key);
-                return root;
-        }
-
-        Node findPrevSuc(Node root, int key){
-                if(root = null)
-                        return root;
-
-                if(root.left != null){
-                        Node temp = root.left;
-                        while(temp.right != null)
-                                temp = temp.right;
-                        return temp;
-                }
-                else{
-                        Node successor = null;
-                        Node curr = root;
-                        while(curr != root){
-                                if(root.key < curr.key){
-                                        successor = curr;
-                                        curr = curr.right;
-                                }
-                                else
-                                        curr = curr.left;
-                        }
-                        return successor;
-                }
-        }
-
-        int findMin(Node root){
+        Node minVal(Node root){
                 Node curr = root;
-
-                while(curr.left != null)
+                while(curr.left != null){
                         curr = curr.left;
+                }
 
-                return curr.key;
+                return curr;
         }
 
-        int findMax(Node root){
+        Node maxVal(Node root){
                 Node curr = root;
+                while(curr.left != null){
+                        curr = curr.left;
+                }
 
-                while(curr.right != null)
-                        curr = curr.right;
+                return curr;
+        }
 
-                return curr.key;
+        Node remove(Node root, int key){
+
+                Node curr = root;
+                Node next = null;
+                //System.out.println(curr.key);
+
+                while(curr != null){
+                        next = curr;
+                        if(key < curr.key){
+                                curr = curr.left;
+                        }
+                        else if(key > curr.key){
+                                curr = curr.right;
+                        }
+                        else{
+                                if(curr.left == null)
+                                        return curr.right;
+                                else if(curr.right == null)
+                                        return curr.left;
+
+                                curr = minVal(curr.right);
+
+                                curr = curr.right;
+                        }
+                }
+
+                next.size = max(heightCheck(next.left), heightCheck(next.right)) + 1;
+                int balance = balanceCheck(next);
+
+                if(balance > 1 && balanceCheck(next.left) >= 0)
+                        return rightRotate(next);
+                if(balance < -1 && balanceCheck(next.right) <= 0)
+                        return leftRotate(next);
+                if(balance > 1 && balanceCheck(next.left) < 0){
+                        next.left = leftRotate(next.left);
+                        return rightRotate(next);
+                }
+                if(balance < -1 && balanceCheck(next.right) > 0){
+                        next.right = rightRotate(next.right);
+                        return leftRotate(next);
+                }
+
+                return 1;
+
+        }
+
+        Node findNext(Node root, Node temp){
+                if(temp.right != null){
+                        return minVal(temp.right);
+                }
+                Node par = temp.parent;
+                while(par != null && temp == par.right){
+                        temp = par;
+                        par = par.parent;
+                }
+                return par;
+        }
+
+        Node findPrev(Node root, Node temp){
+                if(temp.left != null){
+                        return minVal(temp.left);
+                }
+                Node par = temp.parent;
+                while(par != null && temp == par.left){
+                        temp = par;
+                        par = par.parent;
+                }
+                return par;
+        }
+
+        void preOrder(Node root){
+
         }
 
         public static void main(String[] args){
-                Problem2Iterative tree = new Problem2Iterative();
-                
-                tree.root = tree.insert(5);
-                tree.root = tree.insert(10);
-                tree.root = tree.insert(15);
-                tree.root = tree.insert(23);
-                tree.root = tree.insert(12);
-                tree.root = tree.insert(24);
+                avlTree tree = new avlTree();
+                Node tempCheck;
+                Node temp = null;
 
-                tree.root = tree.remove(10);
+                tree.root = tree.insert(tree.root, 10);
+                //System.out.println(tree.root.key);
+                tree.root = tree.insert(tree.root, 15);
+                //System.out.println(tree.root.key + " " + tree.root.right.key);
+                tree.root = tree.insert(tree.root, 5);
+                tree.root = tree.insert(tree.root, 4);
+                tree.root = tree.insert(tree.root, 12);
 
-                int max = tree.findMin(tree.root);
-                int min = tree.findMax(tree.root);
+                tree.root = tree.remove(tree.root, 5);
 
-                tree.root = findPrev(1);
-                tree.root = findNext(1);
+                temp = tree.root.left;
+                tempCheck = tree.minVal(tree.root);
+                System.out.println(tempCheck.key);
+
         }
 
 }
