@@ -10,6 +10,8 @@ class Problem1Recursive {
                         right = null;
                 }
         }
+        
+        Node root;
 
         Problem1Recursive(){
 
