@@ -16,6 +16,7 @@ class avlTree{
         }
 
         Node root;
+        int counter = 0;
 
         avlTree(){
                 root = null;
@@ -82,17 +83,25 @@ class avlTree{
 
                 while(curr != null){
                         next = curr;
-                        if(key < curr.key)
+                        if(key < curr.key){
                                 curr = curr.left;
-                        else
+                                counter++;
+                        }        
+                        else{
                                 curr = curr.right;
+                                counter++;
+                        }
                 }
                 if(next == null)
                         next = newNode;
-                else if(key < next.key)
+                else if(key < next.key){
                         next.left = newNode;
-                else
+                        counter++;
+                }
+                else{
                         next.right = newNode;
+                        counter++;
+                }      
 
                 //System.out.println(root.key + " " + curr.key);
 
@@ -103,16 +112,20 @@ class avlTree{
                         return next;
 
                 if(balance > 1 && key < next.left.key){
+                        counter++;
                         return rightRotate(next);
                 }
                 else if(balance < -1 && key > next.right.key){
+                        counter++;
                         return leftRotate(next);
                 }
                 else if(balance > 1 && key > next.left.key){
+                        counter++;
                         next.left = leftRotate(next.left);
                         return rightRotate(next);
                 }
                 else if(balance < -1 && key < next.right.key){
+                        counter++;
                         next.right = rightRotate(next.right);
                         return  leftRotate(next);
                 }
@@ -125,6 +138,7 @@ class avlTree{
                 Node curr = root;
                 while(curr.left != null){
                         curr = curr.left;
+                        counter++;
                 }
 
                 return curr;
@@ -134,6 +148,7 @@ class avlTree{
                 Node curr = root;
                 while(curr.left != null){
                         curr = curr.left;
+                        counter++;
                 }
 
                 return curr;
@@ -149,18 +164,24 @@ class avlTree{
                         next = curr;
                         if(key < curr.key){
                                 curr = curr.left;
+                                counter++;
                         }
                         else if(key > curr.key){
                                 curr = curr.right;
+                                counter++;
                         }
                         else{
-                                if(curr.left == null)
+                                if(curr.left == null){
+                                        counter++;
                                         return curr.right;
-                                else if(curr.right == null)
+                                }
+                                else if(curr.right == null){
+                                        counter++;
                                         return curr.left;
+                                }        
 
                                 curr = minVal(curr.right);
-
+                                counter++;
                                 curr = curr.right;
                         }
                 }
@@ -168,15 +189,21 @@ class avlTree{
                 next.size = max(heightCheck(next.left), heightCheck(next.right)) + 1;
                 int balance = balanceCheck(next);
 
-                if(balance > 1 && balanceCheck(next.left) >= 0)
+                if(balance > 1 && balanceCheck(next.left) >= 0){
+                        counter++;
                         return rightRotate(next);
-                if(balance < -1 && balanceCheck(next.right) <= 0)
+                }
+                if(balance < -1 && balanceCheck(next.right) <= 0){
+                        counter++;
                         return leftRotate(next);
+                }        
                 if(balance > 1 && balanceCheck(next.left) < 0){
+                        counter++;
                         next.left = leftRotate(next.left);
                         return rightRotate(next);
                 }
                 if(balance < -1 && balanceCheck(next.right) > 0){
+                        counter++;
                         next.right = rightRotate(next.right);
                         return leftRotate(next);
                 }
@@ -191,6 +218,7 @@ class avlTree{
                 }
                 Node par = temp.parent;
                 while(par != null && temp == par.right){
+                        counter++;
                         temp = par;
                         par = par.parent;
                 }
@@ -203,6 +231,7 @@ class avlTree{
                 }
                 Node par = temp.parent;
                 while(par != null && temp == par.left){
+                        counter++;
                         temp = par;
                         par = par.parent;
                 }
@@ -224,7 +253,7 @@ class avlTree{
                         arr[i] = rand.nextInt(100);
                 }
                 for(i = 0; i < size; i++){
-                        insert(root, arr[i]);
+                        insert(root, arr[i], counter);
                 }
         }
 
@@ -238,6 +267,7 @@ class avlTree{
                 temp = tree.root.left;
                 tempCheck = tree.minVal(tree.root);
                 System.out.println(tempCheck.key);
+                System.out.println(counter);
 
         }
 
