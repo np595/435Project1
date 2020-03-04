@@ -1,3 +1,5 @@
+import java.util.Random;
+
 class avlTree{
 
         class Node{
@@ -230,6 +232,8 @@ class avlTree{
                 avlTree tree = new avlTree();
                 Node tempCheck;
                 Node temp = null;
+                
+                randomInsert(10);
 
                 temp = tree.root.left;
                 tempCheck = tree.minVal(tree.root);
