@@ -179,7 +179,7 @@ class Problem1Recursive {
 
                 Problem2Recursive tree = new Problem2Recursive();
                 
-                randomInsert(10);
+                randomInsert(10000);
 
                 tree.root = tree.remove(10);
 
