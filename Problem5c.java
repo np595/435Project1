@@ -27,7 +27,7 @@ class Problem1Iterative{
 
         Problem2Iterative(){
 
-                Node root = null;
+                root = null;
 
         }
 
