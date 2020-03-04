@@ -20,6 +20,8 @@ class Problem1Iterative{
 
                 return temp;
         }
+        
+        Node root;
 
         Problem2Iterative(){
 
