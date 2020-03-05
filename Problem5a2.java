@@ -131,36 +131,51 @@ class Problem1Recursive {
                 }
         }
 
-        public static void main(String[] args){
+        Node getRandomArray(Node root, int size){
+                Random rand = new Random();
+                int i;
+                int[] arr = new int[size];
+                for(i = 0; i < size; i++){
+                        arr[i] = rand.nextInt(100 + 1);
+                }
+                for(i = 0; i < size; i++){
+                        root = insert(root, arr[i]);
+                }
+                inorder(root);
+                System.out.println();
+                
+                int randomInt = rand.nextInt(size);
+                root = remove(root, arr[randomInt]);
+                inorder(root);
+                System.out.println();
 
+                int findNextInt = rand.nextInt(size);
+                int findPrevInt = rand.nextInt(size);
+
+                findNext(root, arr[findNextInt]);
+                System.out.println("Next val from " + arr[findNextInt] + " is " + nextVal);
+
+                findPrev(root, arr[findPrevInt]);
+                System.out.println("Prev val from " + arr[findPrevInt] + " is " + prevVal);
+
+                return root;
+        }
+
+        public static void main(String[] args){
                 Problem1Recursive tree = new Problem1Recursive();
+
+                int size = 10000;
 
                 Node valCheck;
 
-                tree.root = tree.insert(tree.root, 5);
-                tree.root = tree.insert(tree.root, 10);
-                tree.root = tree.insert(tree.root, 15);
-                tree.root = tree.insert(tree.root, 23);
-                tree.root = tree.insert(tree.root, 12);
-                tree.root = tree.insert(tree.root, 24);
-
-                tree.inorder(tree.root);
-                System.out.println();
-                tree.root = tree.remove(tree.root, 10);
-
-                tree.inorder(tree.root);
-                System.out.println();
+                tree.root = tree.getRandomArray(tree.root, size);
 
                 valCheck = tree.findMin(tree.root);
                 System.out.println("Min: " + valCheck.key);
                 valCheck = tree.findMax(tree.root);
                 System.out.println("Max: " + valCheck.key);
 
-                tree.findPrev(tree.root, 12);
-                System.out.println("Prev val from 12 is " + tree.prevVal);
-                tree.findNext(tree.root, 5);
-                System.out.println("Next val from 5 is " + tree.nextVal);
-
         }
+
 
 }
