@@ -12,8 +12,9 @@ class Problem1Recursive {
                         right = null;
                 }
         }
-        
+
         Node root;
+        int prevVal, nextVal;
 
         Problem1Recursive(){
 
@@ -21,14 +22,7 @@ class Problem1Recursive {
 
         }
 
-        Node insert(int key){
-
-                root = insertN(root, key);
-                return root;
-
-        }
-
-        Node insertN(Node root, int key){
+        Node insert(Node root, int key){
 
                 if(root == null){ //Check if tree is empty and return the number as a new node
                         root = new Node(key);
@@ -36,174 +30,136 @@ class Problem1Recursive {
                 }
 
                 if (key < root.key)
-                        root.left = insertN(root.left, key);
+                        root.left = insert(root.left, key);
                 else if (key > root.key)
-                        root.right = insertN(root.right, key);
+                        root.right = insert(root.right, key);
 
                 return root;
         }
 
-        Node remove(int key){
-                root = removeN(root, key);
-                return root;
-        }
-
-        Node removeN(Node root, int key){
+        Node remove(Node root, int key){
                 if(root == null)
-                        return null;
+                        return root;
 
                 if(key < root.key)
-                        root.left = removeN(root.left, key);
+                        root.left = remove(root.left, key);
                 else if(key > root.key)
-                        root.right = removeN(root.right, key);
-
+                        root.right = remove(root.right, key);
                 else{
                         if(root.left == null)
                                 return root.right;
                         else if(root.right == null)
                                 return root.left;
 
-                        root.right = removeN(root.right, root.key);
+                        root = findMin(root.right);
+
+                        root.right = remove(root.right, root.key);
                 }
 
                 return root;
         }
 
-        Node findNext(int key){
+        void findNext(Node root, int key){
 
-                root = findNextSuc(root, key);
-                return root;
-
-        }
-
-        Node findNextSuc(Node root, int key){
-
-                if(root == null)
-                        return null;
-
-                if(root.right != null){
-                        Node temp = root.right;
-                        while(temp.left != null)
-                                temp = temp.left;
-                        return temp;
-                }
-                else{
-                        Node successor = null;
-                        Node curr = root;
-                        while(curr != root){
-                                if(root.key < curr.key){
-                                        successor = curr;
-                                        curr = curr.left;
+                if(root != null){
+                        if(root.key == key){
+                                if(root.right != null){
+                                        Node next = root.right;
+                                        while(next.left != null){
+                                                next = next.left;
+                                        }
+                                        nextVal = next.key;
                                 }
-                                else
-                                        curr = curr.right;
                         }
-                        return successor;
+                        else if(root.key > key){
+                                nextVal = root.key;
+                                findNext(root.left, key);
+                        }
                 }
-
         }
 
-        Node findPrev(int key){
+        void findPrev(Node root, int key){
 
-                root = findPrevSuc(root, key);
-                return root;
-
-        }
-
-        Node findPrevSuc(Node root, int key){
-
-                if(root == null)
-                        return root;
-
-                if(root.left != null){
-                        Node temp = root.left;
-                        while(temp.right != null)
-                                temp = temp.right;
-                        return temp;
-                }
-                else{
-                        Node successor = null;
-                        Node curr = root;
-                        while(curr != root){
-                                if(root.key < curr.key){
-                                        successor = curr;
-                                        curr = curr.right;
+                if(root != null){
+                        if(root.key == key){
+                                if(root.left != null){
+                                        Node next = root.left;
+                                        while(next.right != null){
+                                                next = next.right;
+                                        }
+                                        prevVal = next.key;
                                 }
-                                else
-                                        curr = curr.left;
                         }
-                        return successor;
+                }
+                else if(root.key < key){
+                        prevVal = root.key;
+                        findPrev(root.right, key);
                 }
 
         }
 
-        int findMin(Node root){
+        Node findMin(Node root){
 
-                Node current = root;
+                Node curr = root;
 
-                while(current.left != null){
+                while(curr.left != null){
 
-                        current = current.left;
+                        curr = curr.left;
 
                 }
 
-                return current.key;
+                return curr;
 
         }
 
-        int findMax(Node root){
+        Node findMax(Node root){
 
-                Node current = root;
+                Node curr = root;
 
-                while(current.right != null){
-                        current = current.right;
+                while(curr.right != null){
+                        curr = curr.right;
                 }
-                return current.key;
+                return curr;
 
         }
-        
-        Node getRandomArray(Node root, int size){
-                Random rand = new Random();
-                int i;
-                int[] arr = new int[size];
-                for(i = 0; i < size; i++){
-                        arr[i] = rand.nextInt(100 + 1);
+
+        void inorder(Node root){
+                if(root != null){
+                        inorder(root.left);
+                        System.out.print(root.key + " ");
+                        inorder(root.right);
                 }
-                for(i = 0; i < size; i++){
-                        root = insert(root, arr[i]);
-                }
-                preOrder(root);
-                System.out.println();
-                int randomInt = rand.nextInt(size);
-                root = remove(root, arr[randomInt]);
-                preOrder(root);
-                System.out.println();
-
-                int findNextInt = rand.nextInt(size);
-                int findPrevInt = rand.nextInt(size);
-
-                findNext(root, arr[findNextInt]);
-                System.out.println("Next val from " + arr[findNextInt] + " is " + nextVal);
-
-                findPrev(root, arr[findPrevInt]);
-                System.out.println("Prev val from " + arr[findPrevInt] + " is " + prevVal);
-
-                return root;
         }
 
         public static void main(String[] args){
-                avlTreeRec tree = new avlTreeRec();
 
-                int size = 10000;
+                Problem1Recursive tree = new Problem1Recursive();
 
                 Node valCheck;
 
-                tree.root = tree.getRandomArray(tree.root, size);
+                tree.root = tree.insert(tree.root, 5);
+                tree.root = tree.insert(tree.root, 10);
+                tree.root = tree.insert(tree.root, 15);
+                tree.root = tree.insert(tree.root, 23);
+                tree.root = tree.insert(tree.root, 12);
+                tree.root = tree.insert(tree.root, 24);
 
-                valCheck = tree.minVal(tree.root);
+                tree.inorder(tree.root);
+                System.out.println();
+                tree.root = tree.remove(tree.root, 10);
+
+                tree.inorder(tree.root);
+                System.out.println();
+
+                valCheck = tree.findMin(tree.root);
                 System.out.println("Min: " + valCheck.key);
-                valCheck = tree.maxVal(tree.root);
+                valCheck = tree.findMax(tree.root);
                 System.out.println("Max: " + valCheck.key);
+
+                tree.findPrev(tree.root, 12);
+                System.out.println("Prev val from 12 is " + tree.prevVal);
+                tree.findNext(tree.root, 5);
+                System.out.println("Next val from 5 is " + tree.nextVal);
 
         }
 
