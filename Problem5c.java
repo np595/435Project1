@@ -110,7 +110,7 @@ class Problem1Iterative{
                 Node curr = root;
                 while(curr != null){
                         if(curr.key == key){
-                                curr.right != null{
+                                (curr.right != null){
                                         Node next = curr.right;
                                         while(next.left != null){
                                                 next = next.left;
