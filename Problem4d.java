@@ -143,7 +143,7 @@ class avlTree{
                 while(true){
                         if(curr.key == key)
                                 next = curr;
-                        if(key < curr.key){
+                        else if(key < curr.key){
                                 if(curr.left == null){
                                         break;
                                 }
