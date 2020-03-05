@@ -242,7 +242,7 @@ class avlTreeRec{
         public static void main(String[] args){
                 avlTreeRec tree = new avlTreeRec();
 
-                int size = 10;
+                int size = 10000;
 
                 Node valCheck;
 
