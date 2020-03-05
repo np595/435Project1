@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 class avlTree{
 
         class Node{
@@ -11,7 +13,7 @@ class avlTree{
                         parent = null;
                         size = 1;
                 }
-        }
+        };
 
         Node root;
 
@@ -60,38 +62,53 @@ class avlTree{
                 return heightCheck(root.left)-heightCheck(root.right);
         }
 
-        Node newNode(int data){
+        Node newNode(int data, Node root){
                 Node temp = new Node(data);
 
                 temp.key = data;
                 temp.left = null;
                 temp.right = null;
-                temp.parent = null;
+                temp.parent = root;
                 temp.size = 1;
 
                 return temp;
         }
 
         Node insert(Node root, int key){
-                Node newNode = newNode(key);
+                Node prev = null;
+
+                if(root == null){
+                        return newNode(key, prev);
+                }
 
                 Node curr = root;
                 Node next = null;
 
                 while(curr != null){
                         next = curr;
-                        if(key < curr.key)
+                        if(key < curr.key){//Moves down left
+                                prev = curr;
                                 curr = curr.left;
-                        else
+                        }
+                        else if(key > curr.key){//Moves down right
+                                prev = curr;
                                 curr = curr.right;
+                        }
                 }
-                if(next == null)
-                        next = newNode;
-                else if(key < next.key)
-                        next.left = newNode;
-                else
-                        next.right = newNode;
+                if(key < next.key){
+                        next.left = newNode(key, prev);
+                        System.out.println(next.key + " " + next.left.key);
+                }
+                else if(key > next.key){
+                        next.right = newNode(key, prev);
+                        System.out.println(next.key + " " + next.right.key);
+                }
 
+                if(next.right != null && next.left != null){
+                        System.out.println(next.key + " " + next.right.key + " " + next.left.key);
+                }
+
+                System.out.println();
                 //System.out.println(root.key + " " + curr.key);
 
                 next.size = 1 + max(heightCheck(next.left), heightCheck(next.right));
@@ -112,7 +129,11 @@ class avlTree{
                 }
                 else if(balance < -1 && key < next.right.key){
                         next.right = rightRotate(next.right);
-                        return  leftRotate(next);
+                        return leftRotate(next);
+                }
+
+                while(next.parent != null){//Moves back up the tree
+                        next = next.parent;
                 }
 
                 return next;
@@ -179,7 +200,7 @@ class avlTree{
                         return leftRotate(next);
                 }
 
-                return 1;
+                return next;
 
         }
 
@@ -208,7 +229,24 @@ class avlTree{
         }
 
         void preOrder(Node root){
+                if(root == null)
+                        return;
 
+                Stack<Node> nodeStack = new Stack<Node>();
+                nodeStack.push(root);
+
+                while(nodeStack.empty() == false){
+                        Node node = nodeStack.peek();
+                        System.out.print(node.key + " ");
+                        nodeStack.pop();
+
+                        if(node.right != null){
+                                nodeStack.push(node.right);
+                        }
+                        else if(node.left != null){
+                                nodeStack.push(node.left);
+                        }
+                }
         }
 
         public static void main(String[] args){
@@ -221,13 +259,21 @@ class avlTree{
                 tree.root = tree.insert(tree.root, 15);
                 //System.out.println(tree.root.key + " " + tree.root.right.key);
                 tree.root = tree.insert(tree.root, 5);
+                //System.out.println(tree.root.key + " " + tree.root.right.key + " " + tree.root.left.key);
                 tree.root = tree.insert(tree.root, 4);
+                //System.out.println(tree.root.key + " " + tree.root.left.key);
                 tree.root = tree.insert(tree.root, 12);
-
+                //System.out.println(tree.root.key + " " + tree.root.right.key + " " + tree.root.left.key);
+                tree.preOrder(tree.root);
+                //System.out.println();
                 tree.root = tree.remove(tree.root, 5);
 
+                tree.preOrder(tree.root);
+                //System.out.println();
                 temp = tree.root.left;
                 tempCheck = tree.minVal(tree.root);
+                System.out.println(tempCheck.key);
+                tempCheck = tree.maxVal(tree.root);
                 System.out.println(tempCheck.key);
 
         }
