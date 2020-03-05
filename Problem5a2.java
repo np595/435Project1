@@ -162,34 +162,48 @@ class Problem1Recursive {
 
         }
         
-        void getRandomArray(int size){
+        Node getRandomArray(Node root, int size){
                 Random rand = new Random();
-      
                 int i;
-      
-                int[] arr =  new int[size];
-      
+                int[] arr = new int[size];
                 for(i = 0; i < size; i++){
-                        arr[i] = rand.nextInt(100);
+                        arr[i] = rand.nextInt(100 + 1);
                 }
                 for(i = 0; i < size; i++){
-                        insert(root, arr[i]);
+                        root = insert(root, arr[i]);
                 }
+                preOrder(root);
+                System.out.println();
+                int randomInt = rand.nextInt(size);
+                root = remove(root, arr[randomInt]);
+                preOrder(root);
+                System.out.println();
+
+                int findNextInt = rand.nextInt(size);
+                int findPrevInt = rand.nextInt(size);
+
+                findNext(root, arr[findNextInt]);
+                System.out.println("Next val from " + arr[findNextInt] + " is " + nextVal);
+
+                findPrev(root, arr[findPrevInt]);
+                System.out.println("Prev val from " + arr[findPrevInt] + " is " + prevVal);
+
+                return root;
         }
 
         public static void main(String[] args){
+                avlTreeRec tree = new avlTreeRec();
 
-                Problem2Recursive tree = new Problem2Recursive();
-                
-                getRandomArray(10000);
+                int size = 10;
 
-                tree.root = tree.remove(10);
+                Node valCheck;
 
-                int max = tree.findMin(tree.root);
-                int min = tree.findMax(tree.root);
+                tree.root = tree.getRandomArray(tree.root, size);
 
-                tree.root = findPrev(1);
-                tree.root = findNext(1);
+                valCheck = tree.minVal(tree.root);
+                System.out.println("Min: " + valCheck.key);
+                valCheck = tree.maxVal(tree.root);
+                System.out.println("Max: " + valCheck.key);
 
         }
 
