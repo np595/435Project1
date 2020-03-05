@@ -1,17 +1,13 @@
-import java.util.Random
+import java.util.Stack;
+import java.util.*;
+import java.util.Random;
 
 class Problem1Iterative{
 
         class Node{
                 int key;
                 Node left, right;
-
-                public Node(int item){
-                        key = item;
-                        left = null;
-                        right = null;
-                }
-        }
+        };
 
         Node newNode(int key){
                 Node temp = new Node();
@@ -22,8 +18,9 @@ class Problem1Iterative{
 
                 return temp;
         }
-        
+
         Node root;
+        Node nextVal, prevVal;
         int counter = 0;
 
         Problem2Iterative(){
@@ -32,13 +29,9 @@ class Problem1Iterative{
 
         }
 
-        Node insert(int key){
-                root = insertN(root, key);
-                return root;
-        }
-
-        Node insertN(Node root, int key){
-                Node newNode = newNode(key);
+        @SuppressWarnings("unchecked")
+        Node insert(Node root, int key){
+                Node newnode = newNode(key);
 
                 Node curr = root;
                 Node next = null;
@@ -46,238 +39,242 @@ class Problem1Iterative{
                 while(curr != null){ //Loops through the tree until the spot is found for a new insert
                         next = curr;
                         if(key < curr.key){
-                                counter++;
+                                counter = counter + 1;
                                 curr = curr.left;
                         }
                         else{
-                                counter++;
+                                counter = counter + 1;
+                                curr = curr.right;
+                        }
+                }
+                if(next == null)
+                        next = newnode;
+
+                else if(key < next.key){ //Checks if the left is open first
+                        counter = counter + 1;
+                        next.left = newnode;
+                }
+
+                else{   //Else place it in the right
+                        counter = counter + 1;
+                        next.right = newnode;
+                }
+
+                return next;
+        }
+
+        @SuppressWarnings("unchecked")
+        int remove(Node root, int key){
+                if(root == null)
+                        return 0;
+
+                Node parent = null;
+                Node curr = root;
+                Node next = null;
+
+                while(true){
+                        if(curr.key == key)
+                                next = curr;
+                        else if(key < curr.key){
+                                counter = counter + 1;
+                                if(curr.left == null){
+                                        break;
+                                }
+                                parent = curr;
+                                curr = curr.left;
+                        }
+                        else{
+                                counter = counter + 1;
+                                if(curr.right == null){
+                                        break;
+                                }
+                                parent = curr;
                                 curr = curr.right;
                         }
                 }
 
-                else if(key < curr.key){ //Checks if the left is open first
-                        counter++;
-                        next.left = newNode;
+                if(next == null){
+                        return 0;
                 }
-
-                else{    //Else place it in the right
-                        counter++;
-                        next.right = newNode;
+                else{
+                        if(parent == null){
+                                curr = null;
+                                root = null;
+                        }
+                        else{
+                                next.key = curr.key;
+                                if(parent.left == curr){
+                                        counter = counter + 1;
+                                        parent.left = curr.right;
+                                }
+                                else{
+                                        counter = counter + 1;
+                                        parent.right = curr.left;
+                                        curr = null;
+                                }
+                        }
                 }
-
-                return next;
+                return 1;
         }
 
-        Node remove(int key){
-                root = removeN(root, key);
-                return root;
-        }
-
-        Node removeN(Node root, int key){
-                Node newNode = newNode(key);
-
+        @SuppressWarnings("unchecked")
+        Node findNext(Node root, int key){
                 Node curr = root;
-                Node next = null;
-
                 while(curr != null){
-                        if(key > curr.key){
+                        if(curr.key == key){
                                 if(curr.right != null){
-                                        counter++;
-                                        next = curr;
-                                        curr = curr.right;
-                                }
-                                else{
-                                        counter++;
+                                        counter = counter + 1;
+                                        Node next = curr.right;
+                                        while(next.left != null){
+                                                next = next.left;
+                                        }
+                                        nextVal = next;
                                         break;
                                 }
                         }
-                        else if(key < curr.key){
+                        else if(root.key > key){
+                                counter = counter + 1;
+                                nextVal = curr;
+                                curr = curr.left;
+                        }
+                        else{
+                                counter = counter + 1;
+                                break;
+                        }
+                }
+        }
+
+        @SuppressWarnings("unchecked")
+        Node findPrev(Node root, int key){
+                Node curr = root;
+                while(curr != null){
+                        if(curr.key == key){
                                 if(curr.left != null){
-                                        counter++;
-                                        next = curr;
-                                        curr = curr.left;
-                                }
-                                else{
-                                        counter++;
+                                        counter = counter + 1;
+                                        Node next = curr.left;
+                                        while(next.right != null){
+                                                counter = counter + 1;
+                                                next = next.right;
+                                        }
+                                        prevVal = next;
                                         break;
                                 }
                         }
-                        else{ //If key == curr.key or if value is found
-                                if(curr.left == null && curr.right == null){
-                                        if(next == null){
-                                                root = null;
-                                        }
-                                        else if(next.left.key == curr.key){
-                                                next.left = null;
-                                        }
-                                        else{
-                                                next.right = null;
-                                        }
-                                }
-                                else if(curr.left == null){
-                                        if(next == null){
-                                                counter++;
-                                                root = curr.right;
-                                        }
-                                        else if(next.left.key == curr.key){
-                                                counter++;
-                                                next.left = curr.right;
-                                        }
-                                        else{
-                                                counter++;
-                                                next.right = curr.right;
-                                        }
-                                }
-                                else if(curr.right == null){
-                                        if(next == null){
-                                                counter++;
-                                                root = curr.left;
-                                        }
-                                        else if(next.left.key == curr.key){
-                                                counter++;
-                                                next.left == curr.left;
-                                        }
-                                        else{
-                                                counter++;
-                                                next.right = curr.left;
-                                        }
-                                }
-                                else{
-                                        Node check = curr.right;
-                                        while(true){
-                                                if(check.left != null){
-                                                        counter++;
-                                                        check = curr.left;
-                                                }
-                                                else
-                                                        break;
-                                        }
-                                        int successor = check.key;
-                                        curr = successor;
-                                }
+                        else if(curr.key < key){
+                                counter = counter + 1;
+                                prevVal = curr;
+                                curr = curr.right;
                         }
-                }
-                return next;
-        }
-
-        Node findNext(int key){
-                root = findNextSuc(root, key);
-                return root;
-        }
-
-        Node findNextSuc(Node root, int key){
-                if(root == null)
-                        return null;
-                if(root.right != null){
-                        counter++;
-                        Node temp = root.right;
-                        while(temp.left != null){
-                                counter++;
-                                temp = temp.left;
-                        }
-                        return temp;
-                }
-                else{
-                        Node successor = null;
-                        Node curr = root;
-                        while(curr != root){
-                                if(root.key < curr.key){
-                                        counter++;
-                                        successor = curr;
-                                        curr = curr.left;
-                                }
-                                else{
-                                        counter++;
-                                        curr = curr.right;
-                                }
+                        else{
+                                counter = counter + 1;
+                                break;
                         }
                 }
         }
 
-        Node findPrev(int key){
-                root = findPrevSuc(root, key);
-                return root;
-        }
-
-        Node findPrevSuc(Node root, int key){
-                if(root = null)
-                        return root;
-
-                if(root.left != null){
-                        counter++;
-                        Node temp = root.left;
-                        while(temp.right != null){
-                                counter++;
-                                temp = temp.right;
-                        }
-                        return temp;
-                }
-                else{
-                        Node successor = null;
-                        Node curr = root;
-                        while(curr != root){
-                                if(root.key < curr.key){
-                                        counter++;
-                                        successor = curr;
-                                        curr = curr.right;
-                                }
-                                else
-                                        curr = curr.left;
-                        }
-                        return successor;
-                }
-        }
-
-        int findMin(Node root){
+        @SuppressWarnings("unchecked")
+        Node findMin(Node root){
                 Node curr = root;
 
                 while(curr.left != null){
-                        counter++;
+                        counter = counter + 1;
                         curr = curr.left;
-                }        
+                }
 
-                return curr.key;
+                return curr;
         }
 
-        int findMax(Node root){
+        @SuppressWarnings("unchecked")
+        Node findMax(Node root){
                 Node curr = root;
 
                 while(curr.right != null){
-                        counter++;
+                        counter = counter + 1;
                         curr = curr.right;
                 }
 
-                return curr.key;
+                return curr;
         }
-        
-        void getRandomArray(int size){
+
+        @SuppressWarnings("unchecked")
+        void inOrder(Node root){
+                if(root == null)
+                        return;
+
+                Stack<Node> stack = new Stack<Node>();
+                Node curr = root;
+
+                while(curr != null || stack.size() > 0){
+                        while(curr != null){
+                                counter = counter + 1;
+                                stack.push(curr);
+                                curr = curr.left;
+                        }
+                        curr = stack.pop();
+
+                        System.out.print(curr.data + " ");
+
+                        curr = curr.right;
+                }
+        }
+
+       @SuppressWarnings("unchecked")
+       Node getRandomArray(int size){
                 Random rand = new Random();
-      
-                int i;
-      
-                int[] arr =  new int[size];
-      
+                Node temp = null;
+                Node tempCheck;
+
+                int i, j;
+                int[] arr = new int[size];
                 for(i = 0; i < size; i++){
-                        arr[i] = rand.nextInt(100);
+                        arr[i] = rand.nextInt(100 + 1);
                 }
-                for(i = 0; i < size; i++){
-                        insert(root, arr[i]);
+                temp = insert(temp, arr[0]);
+                for(j = 1; j < size; j++){
+                        insert(temp, arr[j]);
                 }
+                preOrder(temp);
+                System.out.println();
+
+                int randomInt = rand.nextInt(size);
+                remove(temp, arr[randomInt]);
+
+                preOrder(temp);
+                System.out.println();
+
+                int findNextInt = rand.nextInt(size);
+                int findPrevInt = rand.nextInt(size);
+
+                findPrev(temp, arr[findNextInt]);
+                if(prevVal != null)
+                        System.out.println(prevVal.key);
+                else
+                        System.out.println("0");
+
+                findNext(temp, arr[findPrevInt]);
+                if(nextVal != null)
+                        System.out.println(nextVal.key);
+                else
+                        System.out.println("0");
+
+                tempCheck = findMin(temp);
+                System.out.println("Min: " + tempCheck.key);
+                tempCheck = findMax(temp);
+                System.out.println("Max: " + tempCheck.key);
+               
+                System.out.println("Transverse Count: " + counter);
+
+                return temp;
         }
 
         public static void main(String[] args){
-                Problem2Iterative tree = new Problem2Iterative();
-                
-                getRandomArray(10000);
+                Problem1Iterative tree = new Problem1Iterative();
+                Node tempCheck;
+                Node temp = null;
 
-                tree.root = tree.remove(10);
+                int size = 10;
 
-                int max = tree.findMin(tree.root);
-                int min = tree.findMax(tree.root);
+                temp = tree.getRandomArray(size);
 
-                tree.root = findPrev(1);
-                tree.root = findNext(1);
-                System.out.println(counter);
         }
-
 }
