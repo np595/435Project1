@@ -212,7 +212,6 @@ class avlTree{
                                 if(curr.right != null){
                                         Node next = curr.right;
                                         while(next.left != null){
-                                                System.out.println("1");
                                                 next = next.left;
                                         }
                                         nextVal = next;
@@ -236,7 +235,6 @@ class avlTree{
                                 if(curr.left != null){
                                         Node next = curr.left;
                                         while(next != null){
-                                                System.out.println("1");
                                                 next = next.right;
                                         }
                                         prevVal = next;
