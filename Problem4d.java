@@ -4,15 +4,7 @@ class avlTree{
 
         class Node{
                 int key, size;
-                Node left, right, parent;
-
-                public Node(int item){
-                        key = item;
-                        left = null;
-                        right = null;
-                        parent = null;
-                        size = 1;
-                }
+                Node left, right;
         };
 
         Node root;
@@ -75,65 +67,45 @@ class avlTree{
         }
 
         Node insert(Node root, int key){
-                Node prev = null;
-
-                if(root == null){
-                        return newNode(key, prev);
-                }
-
+                Node newnode = newNode(key);
                 Node curr = root;
                 Node next = null;
 
                 while(curr != null){
                         next = curr;
-                        if(key < curr.key){//Moves down left
-                                prev = curr;
+                        if(key < curr.key){
                                 curr = curr.left;
                         }
-                        else if(key > curr.key){//Moves down right
-                                prev = curr;
+                        else{
                                 curr = curr.right;
                         }
                 }
-                if(key < next.key){
-                        next.left = newNode(key, prev);
-                        System.out.println(next.key + " " + next.left.key);
-                }
-                else if(key > next.key){
-                        next.right = newNode(key, prev);
-                        System.out.println(next.key + " " + next.right.key);
-                }
 
-                if(next.right != null && next.left != null){
-                        System.out.println(next.key + " " + next.right.key + " " + next.left.key);
+                if(next == null)
+                        next = newnode;
+                else if(key < next.key){
+                        next.left = newnode;
                 }
-
-                System.out.println();
-                //System.out.println(root.key + " " + curr.key);
+                else{
+                        next.right = newnode;
+                }
 
                 next.size = 1 + max(heightCheck(next.left), heightCheck(next.right));
                 int balance = balanceCheck(next);
-                //System.out.println(root.key + " " + next.key);
-                if((next.left == null) && (next.right == null))
-                        return next;
 
                 if(balance > 1 && key < next.left.key){
                         return rightRotate(next);
                 }
-                else if(balance < -1 && key > next.right.key){
+                if(balance < -1 && key > next.right.key){
                         return leftRotate(next);
                 }
-                else if(balance > 1 && key > next.left.key){
+                if(balance > 1 && key > next.left.key){
                         next.left = leftRotate(next.left);
                         return rightRotate(next);
                 }
-                else if(balance < -1 && key < next.right.key){
+                if(balance < -1 && key < next.right.key){
                         next.right = rightRotate(next.right);
                         return leftRotate(next);
-                }
-
-                while(next.parent != null){//Moves back up the tree
-                        next = next.parent;
                 }
 
                 return next;
