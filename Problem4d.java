@@ -1,4 +1,5 @@
 import java.util.Stack;
+import java.util.*;
 
 class avlTree{
 
@@ -8,6 +9,7 @@ class avlTree{
         };
 
         Node root;
+        Node nextVal, prevVal;
 
         avlTree(){
                 root = null;
@@ -54,19 +56,19 @@ class avlTree{
                 return heightCheck(root.left)-heightCheck(root.right);
         }
 
-        Node newNode(int data, Node root){
-                Node temp = new Node(data);
+        Node newNode(int data){
+                Node temp = new Node();
 
                 temp.key = data;
                 temp.left = null;
                 temp.right = null;
-                temp.parent = root;
                 temp.size = 1;
 
                 return temp;
         }
 
         Node insert(Node root, int key){
+
                 Node newnode = newNode(key);
                 Node curr = root;
                 Node next = null;
@@ -123,100 +125,150 @@ class avlTree{
 
         Node maxVal(Node root){
                 Node curr = root;
-                while(curr.left != null){
-                        curr = curr.left;
+                while(curr.right != null){
+                        curr = curr.right;
                 }
 
                 return curr;
         }
 
-        Node remove(Node root, int key){
+        int remove(Node root, int key){
+                if(root == null)
+                        return 0;
 
+                Node parent = null;
                 Node curr = root;
                 Node next = null;
-                //System.out.println(curr.key);
 
-                while(curr != null){
-                        next = curr;
+                while(true){
+                        if(curr.key == key)
+                                next = curr;
                         if(key < curr.key){
+                                if(curr.left == null){
+                                        break;
+                                }
+                                parent = curr;
                                 curr = curr.left;
                         }
-                        else if(key > curr.key){
-                                curr = curr.right;
-                        }
                         else{
-                                if(curr.left == null)
-                                        return curr.right;
-                                else if(curr.right == null)
-                                        return curr.left;
-
-                                curr = minVal(curr.right);
-
+                                if(curr.right == null){
+                                        break;
+                                }
+                                parent = curr;
                                 curr = curr.right;
                         }
                 }
 
-                next.size = max(heightCheck(next.left), heightCheck(next.right)) + 1;
+                if(next == null){
+                        return 0;
+                }
+                else{
+                        if(parent == null){
+                                curr = null;
+                                root = null;
+                        }
+                        else{
+                                next.key = curr.key;
+                                if(parent.left == curr){
+                                        parent.left = curr.right;
+                                }
+                                else{
+                                        parent.right = curr.left;
+                                        curr = null;
+                                }
+                        }
+                }
+
+                next.size = 1 + max(heightCheck(next.left), heightCheck(next.right));
+
                 int balance = balanceCheck(next);
 
-                if(balance > 1 && balanceCheck(next.left) >= 0)
-                        return rightRotate(next);
-                if(balance < -1 && balanceCheck(next.right) <= 0)
-                        return leftRotate(next);
+                if(balance > 1 && balanceCheck(next.left) >= 0){
+                        rightRotate(next);
+                        return 1;
+                }
+                if(balance < -1 && balanceCheck(next.right) <= 0){
+                        leftRotate(next);
+                        return 1;
+                }
                 if(balance > 1 && balanceCheck(next.left) < 0){
                         next.left = leftRotate(next.left);
-                        return rightRotate(next);
+                        rightRotate(next);
+                        return 1;
                 }
                 if(balance < -1 && balanceCheck(next.right) > 0){
                         next.right = rightRotate(next.right);
-                        return leftRotate(next);
+                        leftRotate(next);
+                        return 1;
                 }
 
-                return next;
-
+                return 1;
         }
 
-        Node findNext(Node root, Node temp){
-                if(temp.right != null){
-                        return minVal(temp.right);
-                }
-                Node par = temp.parent;
-                while(par != null && temp == par.right){
-                        temp = par;
-                        par = par.parent;
-                }
-                return par;
-        }
-
-        Node findPrev(Node root, Node temp){
-                if(temp.left != null){
-                        return minVal(temp.left);
-                }
-                Node par = temp.parent;
-                while(par != null && temp == par.left){
-                        temp = par;
-                        par = par.parent;
-                }
-                return par;
-        }
-
-        void preOrder(Node root){
-                if(root == null)
-                        return;
-
-                Stack<Node> nodeStack = new Stack<Node>();
-                nodeStack.push(root);
-
-                while(nodeStack.empty() == false){
-                        Node node = nodeStack.peek();
-                        System.out.print(node.key + " ");
-                        nodeStack.pop();
-
-                        if(node.right != null){
-                                nodeStack.push(node.right);
+        void findNext(Node root, int key){
+                Node curr = root;
+                while(curr != null){
+                        if(curr.key == key){
+                                if(curr.right != null){
+                                        Node next = curr.right;
+                                        while(next.left != null){
+                                                System.out.println("1");
+                                                next = next.left;
+                                        }
+                                        nextVal = next;
+                                        break;
+                                }
                         }
-                        else if(node.left != null){
-                                nodeStack.push(node.left);
+                        else if(root.key > key){
+                                nextVal = curr;
+                                curr = curr.left;
+                        }
+                        else{
+                                break;
+                        }
+                }
+        }
+
+        void findPrev(Node root, int key){
+                Node curr = root;
+                while(curr != null){
+                        if(curr.key == key){
+                                if(curr.left != null){
+                                        Node next = curr.left;
+                                        while(next != null){
+                                                System.out.println("1");
+                                                next = next.right;
+                                        }
+                                        prevVal = next;
+                                        break;
+                                }
+                        }
+                        else if(curr.key < key){
+                                prevVal = curr;
+                                curr = curr.right;
+                        }
+                        else{
+                                break;
+                        }
+                }
+        }
+
+        void preOrder(Node root){ //Avl needs PreOrder
+                if(root == null){
+                        return;
+                }
+                Stack<Node> stack = new Stack();
+                stack.push(root);
+
+                while(!stack.empty()){
+                        Node curr = stack.pop();
+                        System.out.print(curr.key + " ");
+
+                        if(curr.right != null){
+                                stack.push(curr.right);
+                        }
+                        if(curr.left != null){
+                                stack.push(curr.left);
                         }
                 }
         }
@@ -226,27 +278,33 @@ class avlTree{
                 Node tempCheck;
                 Node temp = null;
 
-                tree.root = tree.insert(tree.root, 10);
-                //System.out.println(tree.root.key);
-                tree.root = tree.insert(tree.root, 15);
-                //System.out.println(tree.root.key + " " + tree.root.right.key);
-                tree.root = tree.insert(tree.root, 5);
-                //System.out.println(tree.root.key + " " + tree.root.right.key + " " + tree.root.left.key);
-                tree.root = tree.insert(tree.root, 4);
-                //System.out.println(tree.root.key + " " + tree.root.left.key);
-                tree.root = tree.insert(tree.root, 12);
-                //System.out.println(tree.root.key + " " + tree.root.right.key + " " + tree.root.left.key);
-                tree.preOrder(tree.root);
-                //System.out.println();
-                tree.root = tree.remove(tree.root, 5);
+                temp = tree.insert(temp, 10);
+                tree.insert(temp, 15);
+                tree.insert(temp, 5);
+                tree.insert(temp, 4);
+                tree.insert(temp, 12);
+                tree.preOrder(temp);
+                System.out.println();
+                tree.remove(temp, 12);
 
-                tree.preOrder(tree.root);
-                //System.out.println();
-                temp = tree.root.left;
-                tempCheck = tree.minVal(tree.root);
-                System.out.println(tempCheck.key);
-                tempCheck = tree.maxVal(tree.root);
-                System.out.println(tempCheck.key);
+                tree.preOrder(temp);
+                System.out.println();
+
+                tree.findPrev(temp, 5);
+                if(tree.prevVal != null)
+                        System.out.println(tree.prevVal.key);
+                else
+                        System.out.println("0");
+                tree.findNext(temp, 10);
+                if(tree.nextVal != null)
+                        System.out.println(tree.nextVal.key);
+                else
+                        System.out.println("0");
+
+                tempCheck = tree.minVal(temp);
+                System.out.println("Min: " + tempCheck.key);
+                tempCheck = tree.maxVal(temp);
+                System.out.println("Max: " + tempCheck.key);
 
         }
 
